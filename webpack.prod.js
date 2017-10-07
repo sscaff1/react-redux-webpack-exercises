@@ -7,8 +7,8 @@ module.exports = {
   entry: ['babel-polyfill', './src/index.js'],
   output: {
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/',
     filename: 'bundle.js',
+    publicPath: '/dist/',
   },
   module: {
     rules: [
@@ -29,7 +29,7 @@ module.exports = {
   },
   plugins: [
     // un-comment if you want to analyze the bundle
-    new BundleAnalyzerPlugin(),
+    // new BundleAnalyzerPlugin(),
     new webpack.LoaderOptionsPlugin({
       minimize: true,
       debug: false,
