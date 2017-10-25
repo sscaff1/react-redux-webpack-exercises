@@ -109,6 +109,6 @@ Input.propTypes = {
   label: PropTypes.string,
   className: PropTypes.string,
   errorMessage: PropTypes.string,
-  isValid: PropTypes.bool.isRequired,
+  isValid: PropTypes.bool,
   inputRef: PropTypes.func.isRequired,
 };
