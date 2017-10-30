@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Input from '../components/Input';
 import Button from '../components/Button';
+import { toggleCountryVisibility } from '../actions/form';
 
-export default class ShippingForm extends Component {
+class ShippingForm extends Component {
   getFieldProps(field) {
     return {
       name: field,
@@ -24,7 +26,9 @@ export default class ShippingForm extends Component {
   }
 
   render() {
+    console.log(this.props)
     const {
+      onClickTest,
       fields,
       showCountryField,
       onBlurChange,
@@ -84,7 +88,9 @@ export default class ShippingForm extends Component {
           placeholder="optional"
           {...this.getFieldProps('address2')}
         />
-        <a href="#">My address is outside the U.S.</a>
+        {!this.props.form.showCountry ?
+          <a href="#" onClick={onShowCountry}>My address is outside the U.S.</a>
+          : <Input label="Country" />}
         <Input
           label="City"
           inputRef={input => (this.city = input)}
@@ -133,3 +139,19 @@ export default class ShippingForm extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return { form: state.form };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onShowCountry(e) {
+      e.preventDefault();
+      dispatch(toggleCountryVisibility(true))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShippingForm)
+
