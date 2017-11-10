@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import Input from '../components/Input';
 import Button from '../components/Button';
+import { DisplayFlex } from '../components/DisplayFlex';
+import { showCountry, validateField } from '../actions';
 
-export default class ShippingForm extends Component {
+class ShippingForm extends Component {
   getFieldProps(field) {
     return {
       name: field,
@@ -34,6 +37,7 @@ export default class ShippingForm extends Component {
       validateFields,
       formSubmitted,
     } = this.props;
+    console.log(this.props);
     if (formSubmitted) {
       return <h1>Form Submitted</h1>;
     }
@@ -59,12 +63,13 @@ export default class ShippingForm extends Component {
     }
     return (
       <form>
-        <div className="group">
+        <DisplayFlex>
           <Input
             inputRef={input => (this.firstName = input)}
             label="First Name"
             classContainer="group"
-            {...this.getFieldProps('firstName')}
+            {...this.getFieldProps('firstName') }
+            onBlur={(e) => onBlurChange('firstName', e.target.value)}
           />
           <Input
             inputRef={input => (this.lastName = input)}
@@ -72,7 +77,7 @@ export default class ShippingForm extends Component {
             classContainer="group"
             {...this.getFieldProps('lastName')}
           />
-        </div>
+        </DisplayFlex>
         <Input
           inputRef={input => (this.address1 = input)}
           label="Street Address"
@@ -84,7 +89,22 @@ export default class ShippingForm extends Component {
           placeholder="optional"
           {...this.getFieldProps('address2')}
         />
-        <a href="#">My address is outside the U.S.</a>
+
+        {showCountryField ? (
+          <Input
+            inputRef={input => (this.country = country)}
+            label="Country"
+            {...this.getFieldProps('country') }
+            isSelect
+          >
+
+          </Input>
+        ): (
+          <a href="#" onClick={(e) => {
+            e.preventDefault();
+            onShowCountry(true);
+          }}>My address is outside the U.S.</a>
+        )}
         <Input
           label="City"
           inputRef={input => (this.city = input)}
@@ -133,3 +153,21 @@ export default class ShippingForm extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    showCountryField: state.form.showCountryField
+  };
+}
+
+const mapDispatchToProps = (dispatch, getState) => {
+  return {
+    onShowCountry() {
+      // i can do stuff here
+      dispatch(showCountry())
+      // more stuff here
+    }
+  }
+}
+
+export default connect(mapStateToProps, { onShowCountry: showCountry, onBlurChange: validateField })(ShippingForm);

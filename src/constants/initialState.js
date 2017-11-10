@@ -44,5 +44,5 @@ const button = {
 export default {
   fields,
   form,
-  button,
+  // button,
 };
